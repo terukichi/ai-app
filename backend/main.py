@@ -1,7 +1,10 @@
-# coding: UTF-8
+# -*- coding: utf-8 -*-
+
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import torch
 
 app = FastAPI()
 
@@ -13,6 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+model = torch.load('model.pth')
 
 @app.get("/api/text")
 def text():
