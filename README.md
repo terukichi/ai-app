@@ -1,6 +1,6 @@
 # AI-APP
 
-<div align="center">
+<div align="left">
   <a href="https://skillicons.dev">
     <img
       alt="python"
