@@ -51,10 +51,10 @@
    python3 create_model.py
    ```
 
-   > [!note]
-   > Runtime Error となる場合
-   >
-   > `create_model.py`で`num_workers`の値を`0`などに変更すると解決することがある
+> [!note]
+> Runtime Error となる場合
+>
+> `create_model.py`で`num_workers`の値を`0`などに変更すると解決することがある
 
 5. サーバーの起動
 
