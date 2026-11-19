@@ -15,7 +15,7 @@
 
 ## Summary
 
-入力画像を分類するWebアプリです。
+入力画像を分類するWebアプリです.
 
 ## Installation
 
@@ -54,7 +54,7 @@
 > [!note]
 > Runtime Error となる場合
 >
-> `create_model.py`で`num_workers`の値を`0`などに変更すると解決することがある
+> `create_model.py`で`num_workers`の値を`0`などに変更すると解決することがあります.
 
 5. サーバーの起動
 
