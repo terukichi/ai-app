@@ -16,6 +16,7 @@ opentelemetry-api==1.45.2
 pillow==13.0.0
 pydantic==2.14.3
 pydantic_core==2.50.4
+python-multipart==0.0.34
 setuptools==84.2.1
 starlette==1.10.0
 sympy==1.14.0
