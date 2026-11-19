@@ -5,19 +5,38 @@ import viteLogo from "./assets/vite.svg";
 import "./App.css";
 
 function App() {
-  const defaultText = "予想";
+  const defaultText = "画像を選択してください";
   const defaultImage = "/src/assets/react.svg";
   const [imageData, setImageData] = useState(defaultImage);
-  const [text, setText] = useState(defaultText);
+    const [text, setText] = useState(defaultText);
+    const [imageFile, setImageFile] = useState(null);
+    const [per, setPer] = useState("");
 
   const handleClick = async () => {
-    setText("実行中...");
+      if ((!imageData) || (imageData === defaultImage)) {
+          return;
+      }
 
+      setText("実行中...");
+      setPer("");
+
+      const formData = new FormData();
+
+      formData.append("file", imageFile);
     try {
-      const response = await fetch("http://localhost:8000/api/text");
-      const data = await response.json();
+        const response = await fetch(
+            "http://localhost:8000/api/text",
+            {
+                method: "POST",
+                body: formData,
+            }
+        );
 
-      setText(data.text);
+        const data = await response.json();
+        console.log(data);
+
+        setText(data.text);
+        setPer("("+data.per+"%)");
     } catch (error) {
       console.error("API Error: ", error);
     }
@@ -27,17 +46,20 @@ function App() {
     const file = event.target.files[0];
     if (!file) return;
 
+      setImageFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       setImageData(reader.result);
     };
     reader.readAsDataURL(file);
-    setText(defaultText);
+      setText(defaultText);
+      setPer("");
   };
 
   const resetImage = () => {
     setImageData(defaultImage);
-    setText(defaultText);
+      setText(defaultText);
+      setPer("");
   };
 
   return (
@@ -60,19 +82,19 @@ function App() {
       </div>
 
       <div>
-        <pre>{text}</pre>
+          <pre>{text} {per}</pre>
       </div>
 
       <div>
         <button>
           <input
             type="file"
-            accept="image/jpeg, image/png"
+            accept="image/"
             onChange={handleFileChange}
           />
         </button>
         <button onClick={resetImage}>リセット</button>
-        <button onClick={handleClick}>実行</button>
+        <button type="button" onClick={handleClick}>実行</button>
       </div>
     </>
   );

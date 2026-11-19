@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import os
+import io
 
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import torch
+from torch import nn
+from torchvision import transforms
+from torch.nn import functional as F
+from torchvision.datasets import CIFAR10
+from PIL import Image
+
+from NeuralNetwork import NeuralNetwork
 
 app = FastAPI()
 
@@ -16,8 +24,46 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-model = torch.load('model.pth')
+dataset = CIFAR10(
+    root="./data",
+    train=True,
+    download=True
+)
 
-@app.get("/api/text")
-def text():
-    return {"text": "実行結果"}
+classes = dataset.classes
+
+device = torch.accelerator.current_accelerator().type if torch.accelerator.is_available() else "cpu"
+model = NeuralNetwork().to(device)
+
+if os.path.exists("model.pth"):
+    model.load_state_dict(torch.load("model.pth", weights_only=True))
+
+model.eval()
+
+transform = transforms.Compose(
+    [
+        transforms.Resize((32, 32)),
+        transforms.ToTensor(),
+    ]
+)
+
+@app.post("/api/text")
+async def text(file: UploadFile = File(...)):
+    #img = Image.open("../frontend/src/assets/hero.png").convert("RGB")
+    img_file = await file.read()
+    # print(file.filename)
+    img = Image.open(io.BytesIO(img_file)).convert("RGB")
+    input_tensor = transform(img).unsqueeze(0)
+    input_tensor = input_tensor.to(device)
+    with torch.no_grad():
+        output_txt = model(input_tensor)
+    probabilities = torch.nn.functional.softmax(output_txt, dim=1)
+    top_prob, top_catid = torch.max(probabilities, dim=1)
+    result = classes[top_catid.item()]
+    percentage = top_prob.item() * 100
+    formatted_per = f"{percentage:.3f}"
+    print(f"{result}\n{formatted_per}%")
+    return {
+        "text": result,
+        "per": formatted_per
+    }
