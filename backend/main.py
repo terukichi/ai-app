@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import os
 import io
+import os
 
-from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
 import torch
-from torch import nn
-from torchvision import transforms
-from torch.nn import functional as F
-from torchvision.datasets import CIFAR10
-from PIL import Image
-
+from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from NeuralNetwork import NeuralNetwork
+from PIL import Image
+from torch import nn
+from torch.nn import functional as F
+from torchvision import transforms
+from torchvision.datasets import CIFAR10
 
 app = FastAPI()
 
@@ -24,15 +23,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-dataset = CIFAR10(
-    root="./data",
-    train=True,
-    download=True
-)
+dataset = CIFAR10(root="./data", train=True, download=True)
 
 classes = dataset.classes
 
-device = torch.accelerator.current_accelerator().type if torch.accelerator.is_available() else "cpu"
+device = (
+    torch.accelerator.current_accelerator().type
+    if torch.accelerator.is_available()
+    else "cpu"
+)
 model = NeuralNetwork().to(device)
 
 if os.path.exists("model.pth"):
@@ -47,9 +46,10 @@ transform = transforms.Compose(
     ]
 )
 
+
 @app.post("/api/text")
 async def text(file: UploadFile = File(...)):
-    #img = Image.open("../frontend/src/assets/hero.png").convert("RGB")
+    # img = Image.open("../frontend/src/assets/hero.png").convert("RGB")
     img_file = await file.read()
     # print(file.filename)
     img = Image.open(io.BytesIO(img_file)).convert("RGB")
@@ -63,7 +63,4 @@ async def text(file: UploadFile = File(...)):
     percentage = top_prob.item() * 100
     formatted_per = f"{percentage:.3f}"
     print(f"{result}\n{formatted_per}%")
-    return {
-        "text": result,
-        "per": formatted_per
-    }
+    return {"text": result, "per": formatted_per}

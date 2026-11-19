@@ -8,35 +8,32 @@ function App() {
   const defaultText = "画像を選択してください";
   const defaultImage = "/src/assets/react.svg";
   const [imageData, setImageData] = useState(defaultImage);
-    const [text, setText] = useState(defaultText);
-    const [imageFile, setImageFile] = useState(null);
-    const [per, setPer] = useState("");
+  const [text, setText] = useState(defaultText);
+  const [imageFile, setImageFile] = useState(null);
+  const [per, setPer] = useState("");
 
   const handleClick = async () => {
-      if ((!imageData) || (imageData === defaultImage)) {
-          return;
-      }
+    if (!imageData || imageData === defaultImage) {
+      return;
+    }
 
-      setText("実行中...");
-      setPer("");
+    setText("実行中...");
+    setPer("");
 
-      const formData = new FormData();
+    const formData = new FormData();
 
-      formData.append("file", imageFile);
+    formData.append("file", imageFile);
     try {
-        const response = await fetch(
-            "http://localhost:8000/api/text",
-            {
-                method: "POST",
-                body: formData,
-            }
-        );
+      const response = await fetch("http://localhost:8000/api/text", {
+        method: "POST",
+        body: formData,
+      });
 
-        const data = await response.json();
-        console.log(data);
+      const data = await response.json();
+      console.log(data);
 
-        setText(data.text);
-        setPer("("+data.per+"%)");
+      setText(data.text);
+      setPer("(" + data.per + "%)");
     } catch (error) {
       console.error("API Error: ", error);
     }
@@ -46,25 +43,25 @@ function App() {
     const file = event.target.files[0];
     if (!file) return;
 
-      setImageFile(file);
+    setImageFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       setImageData(reader.result);
     };
     reader.readAsDataURL(file);
-      setText(defaultText);
-      setPer("");
+    setText("読み込み完了");
+    setPer("");
   };
 
   const resetImage = () => {
     setImageData(defaultImage);
-      setText(defaultText);
-      setPer("");
+    setText(defaultText);
+    setPer("");
   };
 
   return (
     <>
-      <h1>プレビュー</h1>
+      <h1>App</h1>
       <div
         style={{
           display: "flex",
@@ -72,29 +69,26 @@ function App() {
           alignItems: "center",
         }}
       >
-        <img
-          src={imageData}
-          className="framework"
-          alt="Image"
-          height="500px"
-          width="auto"
-        />
-      </div>
-
-      <div>
-          <pre>{text} {per}</pre>
-      </div>
-
-      <div>
-        <button>
-          <input
-            type="file"
-            accept="image/"
-            onChange={handleFileChange}
+        <label>
+          <img
+            src={imageData}
+            className="framework"
+            alt="Image"
+            height="500px"
+            width="auto"
           />
-        </button>
+          <input type="file" accept="image/" onChange={handleFileChange} />
+          <pre>
+            {text} {per}
+          </pre>
+        </label>
+      </div>
+
+      <div>
         <button onClick={resetImage}>リセット</button>
-        <button type="button" onClick={handleClick}>実行</button>
+        <button type="button" onClick={handleClick}>
+          実行
+        </button>
       </div>
     </>
   );
