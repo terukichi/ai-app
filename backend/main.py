@@ -1,4 +1,4 @@
-#coding: UTF-8
+# coding: UTF-8
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,6 +13,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/api/text")
 def text():
-    return {"text":"実行結果"}
+    return {"text": "実行結果"}
