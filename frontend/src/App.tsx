@@ -77,7 +77,7 @@ function App() {
             height="500px"
             width="auto"
           />
-          <input type="file" accept="image/" onChange={handleFileChange} />
+          <input type="file" accept="image/*" onChange={handleFileChange} />
           <pre>
             {text} {per}
           </pre>
