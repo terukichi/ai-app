@@ -6,14 +6,13 @@ import "./App.css";
 
 function App() {
   const defaultText = "画像を選択してください";
-  const defaultImage = "/src/assets/react.svg";
-  const [imageData, setImageData] = useState(defaultImage);
+  const [imageData, setImageData] = useState(null);
   const [text, setText] = useState(defaultText);
   const [imageFile, setImageFile] = useState(null);
   const [per, setPer] = useState("");
 
   const handleClick = async () => {
-    if (!imageData || imageData === defaultImage) {
+    if (!imageData) {
       return;
     }
 
@@ -54,7 +53,7 @@ function App() {
   };
 
   const resetImage = () => {
-    setImageData(defaultImage);
+    setImageData(null);
     setText(defaultText);
     setPer("");
   };
@@ -71,11 +70,13 @@ function App() {
       >
         <label>
           <img
+            className="img"
             src={imageData}
             className="framework"
-            alt="Image"
-            height="500px"
-            width="auto"
+            alt="Click here!"
+            style={{
+              width: imageData ? "auto" : "500px",
+            }}
           />
           <input type="file" accept="image/*" onChange={handleFileChange} />
           <pre>
