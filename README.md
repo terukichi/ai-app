@@ -19,6 +19,12 @@
 
 ## Installation
 
+```bash
+git clone https://github.com/terukichi/ai-app.git
+```
+
+## Usage
+
 ### Backend
 
 1. 仮想環境の作成
