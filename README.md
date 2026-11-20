@@ -10,6 +10,10 @@
       alt="react"
       src="https://img.shields.io/badge/frontend-React-skyblue"
       />
+    <img
+      alt="dataset"
+      src="https://img.shields.io/badge/dataset-CIFAR--10-orange"
+      />
   </a>
 </div>
 
