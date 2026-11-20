@@ -4,7 +4,7 @@
   <a href="https://img.shields.io/badges">
     <img
       alt="python"
-      src="https://img.shields.io/badge/backend-FastAPI-blue"
+      src="https://img.shields.io/badge/backend-FastAPI-forestgreen"
       />
     <img
       alt="react"
