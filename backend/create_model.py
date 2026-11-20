@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import v2
 
+num_workers=4
 
 def train(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
@@ -66,10 +67,12 @@ batch_size = 64
 
 # Data Loader
 train_dataloader = DataLoader(
-    training_data, batch_size=batch_size, shuffle=True, num_workers=4
+    training_data, batch_size=batch_size, shuffle=True, num_workers=num_workers
 )
 
-test_dataloader = DataLoader(test_data, batch_size=batch_size, num_workers=4)
+test_dataloader = DataLoader(
+    test_data, batch_size=batch_size, num_workers=num_workers
+)
 
 for X, y in test_dataloader:
     print(f"Shape of X [N, C, H, W]: {X.shape}")
