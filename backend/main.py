@@ -49,7 +49,6 @@ transform = transforms.Compose(
 
 @app.post("/api/text")
 async def text(file: UploadFile = File(...)):
-    # img = Image.open("../frontend/src/assets/hero.png").convert("RGB")
     img_file = await file.read()
     # print(file.filename)
     img = Image.open(io.BytesIO(img_file)).convert("RGB")
